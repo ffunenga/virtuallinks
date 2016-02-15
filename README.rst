@@ -13,6 +13,12 @@ Virtuallinks
 
 *virtuallinks* simulates at least one link, without changing the file system.
 
+Install it with:
+
+.. code-block:: bash
+
+    $ pip install virtuallinks
+
 If you have any questions, then lets
 `chat <https://gitter.im/ffunenga/virtuallinks>`_.
 
