@@ -21,7 +21,7 @@ from .virtuallinks import nlinks
 
 
 __name__ = 'virtuallinks'
-__version__ = '0.0.1a0'
+__version__ = '0.0.1'
 __author__ = 'Filipe Funenga'
 __license__ = 'MIT'
 __description__ = 'A simulator of file system links.'
