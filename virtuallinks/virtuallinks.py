@@ -19,7 +19,7 @@ def set_debug(enable=True):
                   Default value is True.
     """
     if enable:
-        label = '\033[92m{}\033[0m'.format('Set debug:')
+        label = '\033[92m%s\033[0m' % 'Set debug:'
         print(label, enable)
 
     global DEBUG
@@ -178,8 +178,8 @@ class Decorator(object):
         if self.is_inspected:
             flag = inspector.enter()
             if flag:
-                fmt = '\033[91m{} {}:\033[0m'
-                label = fmt.format('(inspector)', self.inner_callable.__name__)
+                fmt = '\033[91m%s %s:\033[0m'
+                label = fmt % ('(inspector)', self.inner_callable.__name__)
                 print(label, _str_params(args, kwds))
 
         if self.is_monitored:
@@ -187,10 +187,12 @@ class Decorator(object):
             if router:
                 oldargs, oldkwds = args, kwds
                 args = [router(a) for a in oldargs]
-                kwds = {k: router(v) for k, v in oldkwds.items()}
+                kwds = {}
+                for k, v in oldkwds.items():
+                    kwds[k] = router(v)
                 if DEBUG:
-                    fmt = '\033[94m{}:\033[0m'
-                    label = fmt.format(self.inner_callable.__name__)
+                    fmt = '\033[94m%s:\033[0m'
+                    label = fmt % (self.inner_callable.__name__)
                     ini_args = _str_params(oldargs, oldkwds)
                     end_args = _str_params(args, kwds)
                     print(label, ini_args, '->', end_args)
@@ -263,7 +265,7 @@ def enable_inspector(modules=None, methods=None):
                    Default value is [(builtins, 'open')]
     """
     if DEBUG:
-        label = '\033[92m{}\033[0m'.format('Enabling inspector:')
+        label = '\033[92m%s\033[0m' % ('Enabling inspector:')
         print(label, 'now')
 
     modules = modules if modules is not None else [os, os.path]
@@ -285,7 +287,7 @@ def disable_inspector():
     """Disable inspector from monitoring initial entries.
     """
     if DEBUG:
-        label = '\033[92m{}\033[0m'.format('Disabling inspector:')
+        label = '\033[92m%s\033[0m' % ('Disabling inspector:')
         print(label, 'now')
 
     Decorator.unregister_all(as_inspected=True)
@@ -332,7 +334,7 @@ def unmonitor(callable_name, module=None):
     module = module if module is not None else builtins
 
     if DEBUG:
-        label = '\033[92m{}\033[0m'.format('Unmonitoring:')
+        label = '\033[92m%s\033[0m' % ('Unmonitoring:')
         print(label, module, callable_name)
 
     Decorator.unregister(module, callable_name, as_monitored=True)
@@ -349,7 +351,7 @@ def unmonitor_all():
     """Unmonitor all method being monitored for virtuallink's routing.
     """
     if DEBUG:
-        label = '\033[92m{}\033[0m'.format('Unmonitoring:')
+        label = '\033[92m%s\033[0m' % ('Unmonitoring:')
         print(label, 'all')
 
     Decorator.unregister_all(as_monitored=True)
@@ -368,7 +370,7 @@ def monitor(callable_name, module=None):
     module = module if module is not None else builtins
 
     if DEBUG:
-        label = '\033[92m{}\033[0m'.format('monitoring:')
+        label = '\033[92m%s\033[0m' % ('monitoring:')
         print(label, module, callable_name)
 
     if Decorator.TYPICAL_INSTALLED:
@@ -411,7 +413,7 @@ def link(destination, name=None):
     assert name is None or type(name) == str
 
     if DEBUG:
-        label = '\033[92m{}\033[0m'.format('New link:')
+        label = '\033[92m%s\033[0m' % ('New link:')
         print(label, destination, '->', name)
 
     abs_destination = os.path.abspath(destination)
@@ -442,7 +444,7 @@ def unlink(name):
     assert type(name) == str
 
     if DEBUG:
-        print('\033[92m{}\033[0m'.format('Clearing link:'), name)
+        print('\033[92m%s\033[0m' % ('Clearing link:'), name)
 
     abs_name = os.path.abspath(name)
     for idx, (key, _) in enumerate(virtuallinker.links):
@@ -459,7 +461,7 @@ def unlink_all():
     """Unlink all registered virtuallinks.
     """
     if DEBUG:
-        print('\033[92m{}\033[0m'.format('Clearing links:'), 'all')
+        print('\033[92m%s\033[0m' % ('Clearing links:'), 'all')
 
     del virtuallinker.links[:]
 
