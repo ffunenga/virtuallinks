@@ -46,7 +46,9 @@ def get_long_description(fname='README.rst'):
         content = ''
     else:
         ini = content.find('    Why')
-        content = content[ini:]
+        end = content.find('Pure Python code, 2 and 3 compatible.')
+        end += len('Pure Python code, 2 and 3 compatible.')
+        content = content[ini:end]
     return content
 
 
